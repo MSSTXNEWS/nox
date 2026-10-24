@@ -1,0 +1,19 @@
+name: Windows runner smoke check
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  runner-smoke:
+    runs-on: windows-latest
+    steps:
+      - name: Record runner metadata
+        shell: pwsh
+        run: |
+          Write-Output "runner_os=$env:RUNNER_OS"
+          Write-Output "runner_arch=$env:RUNNER_ARCH"
+          Write-Output "runner_name=$env:RUNNER_NAME"
+          Write-Output "commit=$env:GITHUB_SHA"
+          Write-Output "This is a runner availability check only; no application files are downloaded, built, or executed."
