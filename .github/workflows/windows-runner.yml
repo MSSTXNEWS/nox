@@ -5,9 +5,13 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: windows-runner-smoke-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   runner-smoke:
     runs-on: windows-latest
+    timeout-minutes: 5
     steps:
       - name: Record runner metadata
         shell: pwsh
@@ -17,3 +21,15 @@ jobs:
           Write-Output "runner_name=$env:RUNNER_NAME"
           Write-Output "commit=$env:GITHUB_SHA"
           Write-Output "This is a runner availability check only; no application files are downloaded, built, or executed."
+      - name: Report Python availability
+        shell: pwsh
+        run: |
+          if (Get-Command py -ErrorAction SilentlyContinue) {
+            py -0p
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          } elseif (Get-Command python -ErrorAction SilentlyContinue) {
+            python --version
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          } else {
+            throw "No Python launcher or interpreter found."
+          }
