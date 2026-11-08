@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NOX HELION · HOME · CANON FIX</title>
+<style>
+:root { --a:#d89d4a; --glow:rgba(216,157,74,.55); --glass:rgba(6,5,4,.55); }
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#050403;color:#f2e8d8;font-family:system-ui,sans-serif}
+#bg{position:fixed;inset:0;z-index:0}
+.header{position:relative;z-index:10;height:64px;display:flex;align-items:center;padding:0 12px;background:rgba(0,0,0,.5);backdrop-filter:blur(12px);border-bottom:1px solid rgba(216,157,74,.2)}
+.brand{font-size:15px;letter-spacing:1.5px;font-weight:700;text-shadow:0 0 12px var(--a);margin:0 10px;white-space:nowrap}
+.brand small{display:block;font-size:9px;opacity:.7;letter-spacing:1px}
+.nav{display:flex;gap:4px;flex:1;justify-content:center;align-items:center;flex-wrap:wrap}
+.nav a,.nav button{background:transparent;border:1px solid rgba(216,157,74,.35);color:#f0e0c8;padding:6px 10px;border-radius:18px;font-size:11px;cursor:pointer;text-decoration:none;transition:.2s}
+.nav a:hover,.nav button:hover,.nav .on{background:linear-gradient(135deg,#c88830,#ffcc66);color:#000;box-shadow:0 0 16px var(--glow)}
+.stage{position:relative;z-index:1;height:calc(100% - 64px);display:flex;align-items:center;justify-content:center}
+.core-box{position:relative;width:380px;height:380px;display:flex;align-items:center;justify-content:center}
+#core{position:absolute;inset:-70px}
+.core-title{position:relative;z-index:3;font-size:18px;letter-spacing:6px;text-shadow:0 0 20px #ffcc66,0 0 40px #ff6600;pointer-events:none}
+.panels{position:absolute;top:20px;left:16px;right:16px;display:flex;justify-content:space-between;pointer-events:none}
+.panel{width:200px;padding:12px;border-radius:12px;background:var(--glass);backdrop-filter:blur(14px);border:1px solid rgba(216,157,74,.15);font-size:11px;line-height:1.5}
+.panel h4{color:#ffcc88;font-size:10px;letter-spacing:1px;margin-bottom:6px}
+.orbit{position:absolute;width:420px;height:420px;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none}
+.orbit span{position:absolute;width:7px;height:7px;border-radius:50%;background:radial-gradient(circle,#ffdd88,#ff6600);box-shadow:0 0 8px #ff8800;animation:orb 14s linear infinite}
+.orbit span:nth-child(1){animation-delay:0s}.orbit span:nth-child(2){animation-delay:-3.5s}.orbit span:nth-child(3){animation-delay:-7s}.orbit span:nth-child(4){animation-delay:-10.5s}
+@keyframes orb{from{transform:rotate(0) translateX(190px)}to{transform:rotate(360deg) translateX(190px)}}
+.footer{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-size:10px;opacity:.65;letter-spacing:1px}
+.themes{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:5}
+.themes button{background:rgba(0,0,0,.5);border:1px solid rgba(216,157,74,.3);color:#eee;padding:4px 8px;border-radius:12px;font-size:10px;cursor:pointer}
+.themes button.on{background:var(--a);color:#000}
+@media(prefers-reduced-motion:reduce){.orbit span{animation:none}}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div class="header">
+  <div class="brand">NOX HELION<small>LOCAL AI CORE</small></div>
+  <div class="nav">
+    <button class="on">ГЛАВНАЯ</button>
+    <a href="#">ОБУЧЕНИЕ</a>
+    <a href="#">ЯДРО NOX</a>
+    <a href="#">ПАМЯТЬ S03</a>
+    <a href="#">МОНИТОРИНГ</a>
+    <a href="#">ПРОЕКТЫ</a>
+    <a href="#">УСТАНОВКА</a>
+    <a href="#">КИНОТЕАТР</a>
+    <a href="#">НАСТРОЙКИ</a>
+  </div>
+</div>
+<div class="stage">
+  <div class="panels">
+    <div class="panel">
+      <h4>СИСТЕМНЫЙ СТАТУС</h4>
+      РЕЗОНАНС · АКТИВЕН<br>
+      ГАРМОНИЯ · 98.7%<br>
+      ЭНЕРГИЯ ЯДРА · 87%<br>
+      GPU · Н/Д<br>
+      МОДЕЛЬ · Н/Д<br>
+      FPS · Н/Д
+    </div>
+    <div class="panel">
+      <h4>АКТИВНЫЙ РЕЗОНАНС</h4>
+      ЧАСТОТА · 7.83 Гц<br>
+      ФАЗА · СИНХРОННА<br>
+      ПОТОК · ЖИВОЙ<br>
+      ТЕЛЕМЕТРИЯ · РЕАЛЬНЫЕ СОБЫТИЯ<br>
+      СТАТУС · HOLD (PUBLIC)
+    </div>
+  </div>
+  <div class="orbit"><span></span><span></span><span></span><span></span></div>
+  <div class="core-box">
+    <canvas id="core" width="500" height="500"></canvas>
+    <div class="core-title">РЕЗОНАНС</div>
+  </div>
+  <div class="themes">
+    <button class="on">CLASSIC</button>
+    <button>OBSIDIAN</button>
+    <button>FOUNDRY</button>
+    <button>LIQUID METAL</button>
+    <button>AURORA</button>
+  </div>
+  <div class="footer">D02 BLACK LIQUID ECLIPSE · ЖИВОЕ ЯДРО · CANON FIX · PUBLIC DEMO</div>
+</div>
+<script>
+const bg=document.getElementById('bg'), bctx=bg.getContext('2d');
+function resize(){bg.width=innerWidth;bg.height=innerHeight} resize(); addEventListener('resize',resize);
+const blobs=[];
+for(let i=0;i<160;i++) blobs.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:60+Math.random()*180,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.35,ph:Math.random()*6.28});
+function drawBG(t){
+  bctx.fillStyle='rgba(2,1,0,.3)'; bctx.fillRect(0,0,bg.width,bg.height);
+  blobs.forEach(p=>{
+    p.x+=p.vx+Math.sin(t*.00025+p.ph)*.3; p.y+=p.vy+Math.cos(t*.0002+p.ph)*.25;
+    if(p.x<-p.r)p.x=bg.width+p.r; if(p.x>bg.width+p.r)p.x=-p.r;
+    if(p.y<-p.r)p.y=bg.height+p.r; if(p.y>bg.height+p.r)p.y=-p.r;
+    const g=bctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);
+    g.addColorStop(0,'rgba(60,40,20,.45)'); g.addColorStop(.5,'rgba(15,10,6,.28)'); g.addColorStop(1,'rgba(0,0,0,0)');
+    bctx.fillStyle=g; bctx.beginPath(); bctx.arc(p.x,p.y,p.r,0,6.28); bctx.fill();
+  });
+  bctx.globalCompositeOperation='lighter'; bctx.fillStyle='rgba(180,120,40,.03)'; bctx.fillRect(0,0,bg.width,bg.height); bctx.globalCompositeOperation='source-over';
+}
+const core=document.getElementById('core'), cctx=core.getContext('2d');
+function drawCore(t){
+  const w=core.width,h=core.height,cx=w/2,cy=h/2; cctx.clearRect(0,0,w,h);
+  const pulse=1+Math.sin(t*.0026)*.08, r=110*pulse;
+  const og=cctx.createRadialGradient(cx,cy,r*.2,cx,cy,r*2.2);
+  og.addColorStop(0,'rgba(255,180,60,.5)'); og.addColorStop(.45,'rgba(255,80,20,.2)'); og.addColorStop(1,'rgba(0,0,0,0)');
+  cctx.fillStyle=og; cctx.beginPath(); cctx.arc(cx,cy,r*2.2,0,6.28); cctx.fill();
+  for(let i=0;i<7;i++){
+    const ang=t*.0016+i*.9, rr=r*(.5+i*.1)+Math.sin(t*.003+i)*8;
+    cctx.beginPath(); cctx.ellipse(cx+Math.cos(ang)*6,cy+Math.sin(ang)*6,rr,rr*.88,ang*.2,0,6.28);
+    cctx.strokeStyle=`rgba(255,${140+i*10},40,${.38-i*.04})`; cctx.lineWidth=2.6-i*.22; cctx.stroke();
+  }
+  const cg=cctx.createRadialGradient(cx,cy,0,cx,cy,r);
+  cg.addColorStop(0,'#fff8e0'); cg.addColorStop(.3,'#ffaa33'); cg.addColorStop(.65,'#ff5500'); cg.addColorStop(1,'rgba(140,30,0,.5)');
+  cctx.fillStyle=cg; cctx.beginPath(); cctx.arc(cx,cy,r*.5,0,6.28); cctx.fill();
+  cctx.strokeStyle='rgba(255,220,140,.5)'; cctx.lineWidth=1;
+  for(let i=0;i<10;i++){
+    const a=t*.0012+i*Math.PI/5; cctx.beginPath();
+    cctx.moveTo(cx+Math.cos(a)*20,cy+Math.sin(a)*20);
+    cctx.quadraticCurveTo(cx+Math.cos(a+.5)*r*.7,cy+Math.sin(a+.5)*r*.7,cx+Math.cos(a+1)*r,cy+Math.sin(a+1)*r);
+    cctx.stroke();
+  }
+}
+function loop(t){drawBG(t);drawCore(t);requestAnimationFrame(loop)} requestAnimationFrame(loop);
+document.querySelectorAll('.nav button,.themes button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(b.parentElement.tagName==='DIV'&&b.parentElement.classList.contains('themes')?'.themes button':'.nav button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+});
+</script>
+</body>
+</html>
