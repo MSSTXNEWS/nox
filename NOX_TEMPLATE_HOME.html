@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NOX HELION · PRE-PRE</title>
+<style>
+html,body{margin:0;height:100%;background:#000;color:#eee;font-family:system-ui,sans-serif;overflow:hidden}
+.stage{min-height:100vh;background-size:cover;background-position:center;position:relative;transition:background-image .5s ease}
+.stage::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,rgba(255,136,0,.1),transparent 50%);pointer-events:none}
+.menu-grid{position:absolute;top:70px;left:50%;transform:translateX(-50%);display:grid;grid-template-columns:repeat(5,1fr);gap:12px;width:min(900px,95vw);z-index:5}
+@media(max-width:800px){.menu-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:500px){.menu-grid{grid-template-columns:repeat(2,1fr)}}
+.stage::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,rgba(255,136,0,.12),transparent 55%);pointer-events:none;animation:shimmer 5s infinite}
+@keyframes shimmer{0%,100%{opacity:.3}50%{opacity:.7}}
+.bar{box-shadow:0 0 30px rgba(255,136,0,.35),0 0 60px rgba(255,100,0,.15)}
+.brand{animation:brandGlow 2.5s infinite}
+@keyframes brandGlow{0%,100%{text-shadow:0 0 8px rgba(255,176,74,.5)}50%{text-shadow:0 0 20px rgba(255,200,100,.9),0 0 40px rgba(255,136,0,.5)}}
+.tile,.core-btn,.panel button,.bar button{transition:all .25s cubic-bezier(.4,0,.2,1)}
+.tile:hover,.core-btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 0 25px rgba(255,136,0,.6)}
+.panel{box-shadow:0 0 40px rgba(255,136,0,.2),inset 0 0 20px rgba(255,136,0,.05);animation:panelIn .3s ease}
+@keyframes panelIn{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.widget .core{animation:corePulse 1.8s infinite,coreSpin 6s linear infinite}
+.pp b{animation:numGlow 1.5s infinite}
+@keyframes shimmer{0%,100%{opacity:.4}50%{opacity:.8}}
+.bar{position:absolute;top:16px;left:50%;transform:translateX(-50%);display:flex;gap:6px;align-items:center;background:rgba(0,0,0,.7);padding:8px 14px;border-radius:999px;border:1px solid rgba(255,170,80,.5);z-index:10;backdrop-filter:blur(8px);box-shadow:0 0 24px rgba(255,136,0,.2)}
+.brand{color:#ffb04a;font-weight:700;letter-spacing:2px;margin-right:6px;text-shadow:0 0 10px rgba(255,176,74,.5)}
+.bar button,.p,.tile,.panel button,.chat form button,.ctrl button,.core-btn{
+  background:transparent;border:1px solid rgba(255,170,80,.45);color:#ffd9a8;
+  padding:6px 12px;border-radius:999px;font-size:12px;cursor:pointer;
+  transition:all .25s cubic-bezier(.4,0,.2,1);position:relative
+}
+.bar button.on,.bar button:hover,.p.on,.p:hover,.tile:hover,.panel button:hover,.ctrl button:hover,.core-btn:hover{
+  background:linear-gradient(135deg,#ff8800,#ffaa44);color:#000;
+  box-shadow:0 0 18px rgba(255,136,0,.7),inset 0 0 8px rgba(255,200,100,.3);
+  border-color:#ffcc66;transform:scale(1.04)
+}
+.bar button:active,.p:active,.tile:active,.panel button:active,.core-btn:active{transform:scale(.96)}
+.tile{border-radius:10px;text-align:left}
+.core-btn{border-radius:8px;text-align:left;display:block;width:100%}
+.panel{animation:panelIn .35s ease}
+@keyframes panelIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%)}}
+.chat{animation:slideIn .3s ease}
+.logline{animation:fadeIn .2s}
+.ctrl{position:absolute;top:16px;right:16px;display:flex;gap:4px;z-index:10}
+.pp{position:absolute;top:60px;left:16px;background:rgba(0,0,0,.65);border:1px solid rgba(255,170,80,.35);padding:8px 12px;border-radius:8px;font-size:11px;z-index:5}
+.pp b{color:#ffb04a;font-size:18px}
+.hist{position:absolute;bottom:16px;left:16px;width:200px;max-height:120px;overflow:auto;background:rgba(0,0,0,.6);border:1px solid rgba(255,170,80,.25);border-radius:8px;padding:8px;font-size:10px;z-index:5}
+.hist p{margin:2px 0;color:#aaa}
+@keyframes fadeUp{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.p{background:rgba(0,0,0,.6);border:1px solid rgba(255,170,80,.4);color:#ffd9a8;padding:8px 14px;border-radius:8px;font-size:12px;cursor:pointer;transition:all .2s}
+.p.on,.p:hover{background:#ff8800;color:#000;transform:scale(1.05);box-shadow:0 0 10px rgba(255,136,0,.6)}
+.menu-grid{position:absolute;top:80px;left:50%;transform:translateX(-50%);display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;width:min(800px,92vw);max-height:calc(100vh - 160px);overflow:auto;animation:fadeIn .4s;padding:10px}
+.cores-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin:10px 0}
+.panel{max-height:calc(100vh - 120px);overflow:auto}
+@media(max-width:600px){
+  .bar{flex-wrap:wrap;width:95vw;justify-content:center}
+  .chat{width:95vw;right:2.5vw}
+  .persona-row{flex-wrap:wrap;width:95vw;justify-content:center}
+  .pp,.hist{display:none}
+}
+</style>
+</head>
+<body>
+<div class="stage" id="stage" style="background-image:url(home.png)">
+  <div class="bar">
+    <span class="brand">NOX HELION</span>
+    <button class="on" onclick="show('home')">ГЛАВНАЯ</button>
+    <button onclick="show('menu')">МЕНЮ</button>
+    <button onclick="show('cores')">ЯДРА</button>
+    <button onclick="show('chat')">ЧАТ</button>
+  </div>
+  <div class="ctrl">
+    <button onclick="alert('Шаблон PRE-PRE с Google Drive')">i</button>
+  </div>
+  <div class="pp"><b>98%</b><br>РЕЗОНАНС</div>
+  <div class="orbit"><i></i><i></i><i></i><i></i></div>
+  <div class="widget" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2">
+    <div class="core"></div>
+  </div>
+  <div class="menu-grid" id="menu" style="display:none"></div>
+  <div class="panel" id="panel" style="display:none;position:absolute;left:50%;top:55%;transform:translateX(-50%);width:min(480px,90vw);background:rgba(6,6,12,.92);border:1px solid rgba(255,170,80,.4);border-radius:14px;padding:16px;z-index:15"></div>
+</div>
+<script>
+function show(s){
+  document.querySelectorAll('.bar button').forEach(b=>b.classList.remove('on'));
+  event.target.classList.add('on');
+  const stage=document.getElementById('stage');
+  const menu=document.getElementById('menu');
+  const panel=document.getElementById('panel');
+  menu.style.display='none'; panel.style.display='none';
+  if(s==='home'){ stage.style.backgroundImage='url(home.png)'; }
+  else if(s==='menu'){ stage.style.backgroundImage='url(menu.png)'; menu.style.display='grid'; }
+  else if(s==='cores'){ stage.style.backgroundImage='url(cores.png)'; }
+  else if(s==='chat'){ panel.style.display='block'; panel.innerHTML='<h3>ЧАТ S03</h3><p>Живой диалог из шаблона Drive</p>'; }
+}
+// menu tiles
+const tiles=['РАБОТА','ИНТЕЛЛЕКТ','ЗНАНИЯ','ОБУЧЕНИЕ','РАЗВЛЕЧЕНИЯ','ЛЮДИ','ТВОРЧЕСТВО','БИЗНЕС','МИР','ПК'];
+const mg=document.getElementById('menu');
+tiles.forEach(t=>{const d=document.createElement('div');d.className='tile';d.textContent=t;d.onclick=()=>alert(t);mg.appendChild(d);});
+</script>
+</body>
+</html>
