@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NOX HELION · HOME · D02 CANON</title>
+<style>
+:root { --accent: #ffaa44; --glow: rgba(255,160,40,0.55); --glass: rgba(8,6,4,0.48); }
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; height:100%; overflow:hidden; background:#000; color:#f0e6d0; font-family: system-ui, -apple-system, sans-serif; }
+#bg { position:fixed; inset:0; z-index:0; }
+.ui { position:relative; z-index:2; height:100%; display:flex; flex-direction:column; }
+.topbar { height:58px; display:flex; align-items:center; padding:0 18px; gap:8px; background:rgba(0,0,0,0.42); backdrop-filter:blur(14px); border-bottom:1px solid rgba(255,180,60,0.18); }
+.logo { font-size:17px; letter-spacing:2.5px; font-weight:600; text-shadow:0 0 14px var(--accent); margin-right:8px; }
+.logo span { color:var(--accent); }
+.btn-row { display:flex; gap:6px; flex:1; justify-content:center; flex-wrap:wrap; }
+.btn { position:relative; padding:8px 14px; border:none; border-radius:22px; background:rgba(18,14,10,0.62); color:#f5ead8; cursor:pointer; font-size:12px; letter-spacing:0.4px; border:1px solid rgba(255,180,80,0.28); backdrop-filter:blur(8px); transition:transform .18s, box-shadow .18s; }
+.btn::before { content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none; background:linear-gradient(120deg, rgba(255,200,80,0.18), transparent 45%, rgba(255,120,30,0.12)); animation:metalFlow 5s linear infinite; }
+@keyframes metalFlow { to { transform:translateX(30px) skewX(-4deg); } }
+.btn:hover, .btn.on { transform:translateY(-2px) scale(1.04); box-shadow:0 0 20px var(--glow); }
+.btn.on { background:linear-gradient(135deg,#ff8800,#ffcc66); color:#000; }
+.main { flex:1; position:relative; display:flex; align-items:center; justify-content:center; }
+.core-wrap { position:relative; width:320px; height:320px; display:flex; align-items:center; justify-content:center; }
+#core { position:absolute; inset:-60px; }
+.core-label { position:relative; z-index:3; font-size:20px; letter-spacing:5px; font-weight:500; text-shadow:0 0 24px #ffcc66, 0 0 48px #ff7700; pointer-events:none; }
+.panels { position:absolute; top:70px; left:16px; right:16px; display:flex; justify-content:space-between; pointer-events:none; }
+.panel { width:210px; padding:14px; border-radius:14px; background:var(--glass); backdrop-filter:blur(16px); border:1px solid rgba(255,180,60,0.14); font-size:12px; line-height:1.55; }
+.panel h4 { margin-bottom:6px; color:#ffcc88; font-weight:500; font-size:11px; letter-spacing:1px; }
+.orbit { position:absolute; width:340px; height:340px; left:50%; top:50%; transform:translate(-50%,-50%); pointer-events:none; z-index:1; }
+.orbit i { position:absolute; width:8px; height:8px; border-radius:50%; background:radial-gradient(circle,#ffcc66,#ff6600); box-shadow:0 0 10px #ff8800; animation:orbit 12s linear infinite; }
+.orbit i:nth-child(1){ animation-delay:0s } .orbit i:nth-child(2){ animation-delay:-3s } .orbit i:nth-child(3){ animation-delay:-6s } .orbit i:nth-child(4){ animation-delay:-9s }
+@keyframes orbit { from { transform:rotate(0deg) translateX(160px) } to { transform:rotate(360deg) translateX(160px) } }
+.status-bar { position:absolute; bottom:12px; left:50%; transform:translateX(-50%); font-size:11px; opacity:0.75; letter-spacing:1px; pointer-events:none; }
+@media (prefers-reduced-motion: reduce) { .btn::before, .orbit i { animation:none; } }
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div class="ui">
+  <div class="topbar">
+    <div class="logo">NOX <span>HELION</span></div>
+    <div class="btn-row">
+      <button class="btn on">ГЛАВНАЯ</button>
+      <button class="btn">РЕЗОНАНС</button>
+      <button class="btn">ОБУЧЕНИЕ</button>
+      <button class="btn">ЯДРО</button>
+      <button class="btn">ПАМЯТЬ</button>
+      <button class="btn">МОНИТОРИНГ</button>
+      <button class="btn">ПРОЕКТЫ</button>
+      <button class="btn">КИНО</button>
+      <button class="btn">НАСТРОЙКИ</button>
+    </div>
+  </div>
+  <div class="main">
+    <div class="panels">
+      <div class="panel">
+        <h4>СИСТЕМНЫЙ СТАТУС</h4>
+        РЕЗОНАНС · АКТИВЕН<br>
+        ГАРМОНИЯ · 98.7%<br>
+        ЭНЕРГИЯ ЯДРА · 87%<br>
+        GPU · Н/Д<br>
+        МОДЕЛЬ · Н/Д
+      </div>
+      <div class="panel">
+        <h4>АКТИВНЫЙ РЕЗОНАНС</h4>
+        ЧАСТОТА · 7.83 Гц<br>
+        ФАЗА · СИНХРОННА<br>
+        ПОТОК · ЖИВОЙ<br>
+        ТЕЛЕМЕТРИЯ · РЕАЛЬНЫЕ СОБЫТИЯ
+      </div>
+    </div>
+    <div class="orbit"><i></i><i></i><i></i><i></i></div>
+    <div class="core-wrap">
+      <canvas id="core" width="440" height="440"></canvas>
+      <div class="core-label">РЕЗОНАНС</div>
+    </div>
+  </div>
+  <div class="status-bar">D02 BLACK LIQUID ECLIPSE · ЖИВОЕ ЯДРО · CANON FIX · PUBLIC DEMO</div>
+</div>
+<script>
+const bg = document.getElementById('bg'); const bctx = bg.getContext('2d');
+function resize(){ bg.width = innerWidth; bg.height = innerHeight; } resize(); addEventListener('resize', resize);
+const blobs = [];
+for(let i=0;i<140;i++){ blobs.push({ x: Math.random()*innerWidth, y: Math.random()*innerHeight, r: 50+Math.random()*160, vx:(Math.random()-0.5)*0.45, vy:(Math.random()-0.5)*0.4, phase: Math.random()*6.28, speed: 0.25+Math.random()*0.6 }); }
+function drawBG(t){
+  bctx.fillStyle = 'rgba(1,1,2,0.28)'; bctx.fillRect(0,0,bg.width,bg.height);
+  blobs.forEach(p=>{
+    p.x += p.vx + Math.sin(t*0.00028 + p.phase)*0.35; p.y += p.vy + Math.cos(t*0.00022 + p.phase)*0.3;
+    if(p.x < -p.r) p.x = bg.width+p.r; if(p.x > bg.width+p.r) p.x = -p.r;
+    if(p.y < -p.r) p.y = bg.height+p.r; if(p.y > bg.height+p.r) p.y = -p.r;
+    const g = bctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);
+    g.addColorStop(0,'rgba(50,35,18,0.5)'); g.addColorStop(0.45,'rgba(18,12,8,0.32)'); g.addColorStop(1,'rgba(0,0,0,0)');
+    bctx.fillStyle = g; bctx.beginPath(); bctx.arc(p.x,p.y,p.r,0,6.28); bctx.fill();
+  });
+  bctx.globalCompositeOperation = 'lighter'; bctx.fillStyle = 'rgba(200,140,50,0.035)'; bctx.fillRect(0,0,bg.width,bg.height); bctx.globalCompositeOperation = 'source-over';
+}
+const core = document.getElementById('core'); const cctx = core.getContext('2d');
+function drawCore(t){
+  const w=core.width, h=core.height, cx=w/2, cy=h/2; cctx.clearRect(0,0,w,h);
+  const pulse = 1 + Math.sin(t*0.0028)*0.09; const r = 100 * pulse;
+  const og = cctx.createRadialGradient(cx,cy,r*0.2,cx,cy,r*2.1);
+  og.addColorStop(0,'rgba(255,190,70,0.5)'); og.addColorStop(0.4,'rgba(255,90,20,0.22)'); og.addColorStop(1,'rgba(0,0,0,0)');
+  cctx.fillStyle = og; cctx.beginPath(); cctx.arc(cx,cy,r*2.1,0,6.28); cctx.fill();
+  for(let i=0;i<6;i++){
+    const ang = t*0.0018 + i*1.05; const rr = r*(0.55 + i*0.11) + Math.sin(t*0.0035+i)*9;
+    cctx.beginPath(); cctx.ellipse(cx+Math.cos(ang)*7, cy+Math.sin(ang)*7, rr, rr*0.9, ang*0.25, 0, 6.28);
+    cctx.strokeStyle = `rgba(255,${150+i*12},40,${0.4-i*0.05})`; cctx.lineWidth = 2.8 - i*0.28; cctx.stroke();
+  }
+  const cg = cctx.createRadialGradient(cx,cy,0,cx,cy,r);
+  cg.addColorStop(0,'#fff6dd'); cg.addColorStop(0.28,'#ffbb44'); cg.addColorStop(0.65,'#ff5500'); cg.addColorStop(1,'rgba(160,30,0,0.55)');
+  cctx.fillStyle = cg; cctx.beginPath(); cctx.arc(cx,cy,r*0.52,0,6.28); cctx.fill();
+  cctx.strokeStyle = 'rgba(255,230,150,0.55)'; cctx.lineWidth = 1.1;
+  for(let i=0;i<9;i++){
+    const a = t*0.0014 + i*Math.PI/4.5; cctx.beginPath();
+    cctx.moveTo(cx+Math.cos(a)*22, cy+Math.sin(a)*22);
+    cctx.quadraticCurveTo(cx+Math.cos(a+0.6)*r*0.75, cy+Math.sin(a+0.6)*r*0.75, cx+Math.cos(a+1.2)*r*1.05, cy+Math.sin(a+1.2)*r*1.05);
+    cctx.stroke();
+  }
+}
+function loop(t){ drawBG(t); drawCore(t); requestAnimationFrame(loop); }
+requestAnimationFrame(loop);
+document.querySelectorAll('.btn').forEach(b=>{ b.onclick = ()=>{ document.querySelectorAll('.btn').forEach(x=>x.classList.remove('on')); b.classList.add('on'); }; });
+</script>
+</body>
+</html>
